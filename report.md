@@ -159,7 +159,7 @@ make route
 
 The current synthesis script targets the Kintex-7 substitute part `xc7k160tffg676-2`. Generated logs and reports are written under `outputs/logs/`, `outputs/reports/`, and the generated Vivado project directory.
 
-### Synthesis Output
+### Synthesis Result
 
 ```text
 <Add Vivado synthesis output here>
