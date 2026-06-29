@@ -194,7 +194,20 @@ Add the timing numbers from the Vivado timing summary report after implementatio
 | Worst pulse width slack (WPWS) |  |
 | Timing status |  |
 
+### Power Summary
 
+Add the Vivado power report numbers after implementation or route.
+
+| Power item | Value |
+| --- | ---: |
+| Total on-chip power |  |
+| Dynamic power |  |
+| Static power |  |
+| Device static power |  |
+| Design power budget |  |
+| Junction temperature |  |
+| Thermal margin |  |
+| Confidence level |  |
 ## 5. Current Status
 
 The project is currently at the RTL-verified accelerator stage. The hardware datapath, custom AXI4 register/control interface, AXI4 full DDR master path, behavioral DDR memory model, testbench, and Python input-generation flow are present and runnable. The software flow supports an input image with either a task ID or a natural-language task prompt. The task logic in sw/vega.py defines the 14 supported tasks and maps them into compact task IDs, while the object-processing path uses COCO-style object classes to prepare candidate records, bounding boxes, confidence scores, and image pixels for the accelerator.
