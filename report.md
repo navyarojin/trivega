@@ -257,3 +257,6 @@ xychart-beta
     y-axis "Latency (us)" 0 --> 25
     bar [4.46, 23.40]
 ```
+## Conclusion
+
+TriVega demonstrates a complete RTL-verified accelerator flow for task-aware object selection using a custom AXI4-controlled datapath. The design integrates register programming, AXI4 full DDR access, fixed-point feature scoring, affordance matching, score fusion, top-1 selection, and a matrix-mode verification path within a self-checking simulation environment. Questa/ModelSim simulation verifies both image mode and matrix mode, while the matrix-mode comparison provides a measurable hardware/software acceleration result. Vivado synthesis, utilization, timing, and power reports provide the implementation evidence needed to evaluate FPGA resource cost and timing feasibility. The next step is to connect the verified accelerator to the VEGA host software flow on the target FPGA platform, map the control registers and DDR buffers into the system address space, and validate end-to-end task-aware inference on hardware
