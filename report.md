@@ -10,23 +10,40 @@ The system addresses task-aware object selection problem: given an image and one
 
 ```mermaid
 flowchart TB
-  subgraph control[Control path]
-    HOST -->|config| REGS --> CORE
-  end
-  subgraph compute[Compute pipeline]
-    PROJ --> COS --> AFF --> FUSE --> TOP1
-  end
-  subgraph data[Data path]
-    DMA --> RD & WR
-    RD --> BUF --> PROJ
-    TOP1 --> WR --> DDR
-  end
-  CORE --> DMA
-  CORE -->|interrupt| HOST
-  MM[Matrix mode] --> PROJ
+    subgraph SOFTWARE["SOFTWARE (Python: vega.py / infer.py)"]
+        DET["Object detection<br/>Faster R-CNN to boxes/labels/scores"]
+        RES["Task resolver<br/>text/ID to task vector"]
+        ENC["Encode inputs<br/>fixed-point .mem files"]
+        DEC["Decode result<br/>render annotated image"]
+        DET --> ENC
+        RES --> ENC
+    end
+
+    subgraph HOSTMEM["HOST + DDR (tb_vega.sv / ddr_mem.sv)"]
+        CPU["AXI4 bus driver<br/>config writes, status polls"]
+        DDR[("DDR memory")]
+    end
+
+    subgraph HARDWARE["HARDWARE (top.sv)"]
+        REGS["axi4_regs<br/>AXI4 full slave: control + status"]
+        CORE["vega_core<br/>top FSM"]
+        DMA["axi4_dma<br/>mode FSM + datapath control"]
+        RD["dma_rd<br/>AXI4 full master: burst read"]
+        PIPE["embed_proj to cos_sim to<br/>aff_score to score_fuse to top1_sel"]
+        WR["dma_wr<br/>AXI4 full master: burst write"]
+        REGS --> CORE --> DMA
+        DMA --> RD --> PIPE --> WR
+    end
+
+    ENC -->|objects/task/pixels| DDR
+    CPU -->|AXI4 full: ctrl regs| REGS
+    DDR -->|AXI4 full: burst read| RD
+    WR -->|AXI4 full: burst write| DDR
+    DDR -->|result.mem| DEC
+    CORE -.->|interrupt| CPU
 ```
 
-The register/control interface is custom AXI4-style, not AXI4-Lite. The slave-side register block exposes AXI4 full-style channels and sideband signals, while the accelerator uses an AXI4 full master interface for DDR access.
+The register/control interface is custom AXI4-style. The slave-side register block exposes AXI4 full-style channels and sideband signals, while the accelerator uses an AXI4 full master interface for DDR access.
 
 ## 2. Simulation Setup Block Diagram
 
