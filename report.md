@@ -115,6 +115,8 @@ Simulation was run from the project root using:
 ```powershell
 make sim
 ```
+Observed Output:
+
 
 The Questa/ModelSim run completed successfully with zero compile warnings, zero compile errors, zero simulation warnings, and zero simulation errors.
 
@@ -144,6 +146,54 @@ Measured matrix-mode metrics:
 | RTL latency | 4.460 us |
 | RTL frequency | 50 MHz |
 | Matrix output words | 9 |
+
+## Synthesis Report
+
+Vivado runs are launched from the project root using:
+
+```powershell
+make synth
+make impl
+make route
+```
+
+The current synthesis script targets the Kintex-7 substitute part `xc7k160tffg676-2`. Generated logs and reports are written under `outputs/logs/`, `outputs/reports/`, and the generated Vivado project directory.
+
+### Synthesis Output
+
+```text
+<Add Vivado synthesis output here>
+```
+
+### Resource Utilization
+
+Add the utilization numbers from the Vivado utilization report.
+
+| Resource | Used | Available | Utilization |
+| --- | ---: | ---: | ---: |
+| LUT |  |  |  |
+| LUTRAM |  |  |  |
+| FF |  |  |  |
+| BRAM |  |  |  |
+| DSP |  |  |  |
+| IO |  |  |  |
+| BUFG |  |  |  |
+
+### Timing Summary
+
+Add the timing numbers from the Vivado timing summary report after implementation or route.
+
+| Timing item | Value |
+| --- | ---: |
+| Target clock period | 20.000 ns |
+| Target frequency | 50 MHz |
+| Worst negative slack (WNS) |  |
+| Total negative slack (TNS) |  |
+| Worst hold slack (WHS) |  |
+| Total hold slack (THS) |  |
+| Worst pulse width slack (WPWS) |  |
+| Timing status |  |
+
 
 ## 5. Current Status
 
