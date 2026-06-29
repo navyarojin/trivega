@@ -147,7 +147,7 @@ Measured matrix-mode metrics:
 
 ## 5. Current Status
 
-The current project is functionally verified in RTL simulation. Remaining contest-facing work is board integration with VEGA/Genesys-2 and end-to-end image inference.
+The current project is functionally verified in RTL simulation. Remaining work is board integration with VEGA/Genesys-2 and end-to-end image inference.
 
 ## 6. Acceleration Achieved
 
