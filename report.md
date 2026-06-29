@@ -2,7 +2,7 @@
 
 ## Introduction
 
-The current project implements a system that takes an image and a task description, then identifies the most appropriate object in the scene based on task relevance rather than generic object detection alone as a software-assisted, FPGA-oriented pipeline: software prepares COCO-style object candidates and task encodings, while RTL performs fixed-point scoring, affordance matching, fusion, and best-object selection through a custom AXI4-controlled accelerator.
+The project implements a system that takes an image and a task description, then identifies the most appropriate object in the scene based on task relevance rather than generic object detection alone as a software-assisted, FPGA-oriented pipeline: software prepares COCO-style object candidates and task encodings, while RTL performs fixed-point scoring, affordance matching, fusion, and best-object selection through a custom AXI4-controlled accelerator.
 
 ## 1. Block Diagram of the Design
 
