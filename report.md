@@ -9,31 +9,21 @@ The project implements a system that takes an image and a task description, then
 The system addresses task-aware object selection problem: given an image and one of the 14 reference tasks, the system selects the most appropriate object in the scene. The design uses software to prepare COCO object candidates and task information, then uses a custom fixed-point RTL accelerator to score and select the best object.
 
 ```mermaid
-flowchart LR
-    IMG["Input image<br/>COCO-style scene"] --> SW["Software front end<br/>object detection + task encoding"]
-    TASK["Task input<br/>14 reference tasks / text prompt"] --> SW
-
-    SW -->|"object records, boxes,<br/>task word, pixels"| DDR["DDR memory"]
-    HOST["VEGA / host processor"] -->|"custom AXI4 register/control"| REGS["axi4_regs<br/>control/status/counters"]
-    REGS --> CORE["vega_core<br/>top controller"]
-    CORE --> DMA["axi4_dma<br/>mode FSM + datapath control"]
-
-    DMA -->|"AXI4 full read/write"| DDR
-    DMA --> RD["dma_rd<br/>burst read engine"]
-    DMA --> WR["dma_wr<br/>burst write engine"]
-
-    DMA --> BUF["On-chip buffers<br/>object data, boxes, scene cache, scores"]
-    BUF --> PROJ["embed_proj<br/>fixed-point projection"]
-    PROJ --> COS["cos_sim<br/>task similarity"]
-    COS --> AFF["aff_score<br/>affordance match"]
-    AFF --> FUSE["score_fuse<br/>weighted score fusion"]
-    FUSE --> TOP1["top1_sel<br/>best object selector"]
-    TOP1 --> WR
-    WR -->|"best object index / scores"| DDR
-
-    DMA --> MM["Matrix mode<br/>N=1..4 fixed-point matmul"]
-    MM --> PROJ
-    CORE --> IRQ["interrupt"]
+flowchart TB
+  subgraph control[Control path]
+    HOST -->|config| REGS --> CORE
+  end
+  subgraph compute[Compute pipeline]
+    PROJ --> COS --> AFF --> FUSE --> TOP1
+  end
+  subgraph data[Data path]
+    DMA --> RD & WR
+    RD --> BUF --> PROJ
+    TOP1 --> WR --> DDR
+  end
+  CORE --> DMA
+  CORE -->|interrupt| HOST
+  MM[Matrix mode] --> PROJ
 ```
 
 The register/control interface is custom AXI4-style, not AXI4-Lite. The slave-side register block exposes AXI4 full-style channels and sideband signals, while the accelerator uses an AXI4 full master interface for DDR access.
