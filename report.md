@@ -147,7 +147,9 @@ Measured matrix-mode metrics:
 
 ## 5. Current Status
 
-The current project is functionally verified in RTL simulation. Remaining work is board integration with VEGA/Genesys-2 and end-to-end image inference.
+The project is currently at the RTL-verified accelerator stage. The hardware datapath, custom AXI4 register/control interface, AXI4 full DDR master path, behavioral DDR memory model, testbench, and Python input-generation flow are present and runnable. The software flow supports an input image with either a task ID or a natural-language task prompt. The task logic in sw/vega.py defines the 14 supported tasks and maps them into compact task IDs, while the object-processing path uses COCO-style object classes to prepare candidate records, bounding boxes, confidence scores, and image pixels for the accelerator.
+The intended execution model is a VEGA-host-driven pipeline. In this flow, the VEGA processor prepares the input buffers in DDR, including object metadata, task data, image pixels, and output space. It then programs the accelerator registers with the input base address, task base address, output base address, object count, execution mode, and start command. Once started, the RTL accelerator performs AXI4 full DDR reads, executes the fixed-point scoring pipeline, writes the selected result back to DDR, and updates status/counter registers for host readback.
+At present, this full control sequence is verified in RTL simulation through tb/tb_vega.sv. The simulation runs both image mode and matrix mode, confirms that image-mode selection returns a valid best object index, and confirms that matrix-mode output matches the Python reference. The next project step is system integration on the VEGA host platform: map the accelerator into the VEGA address space, port the current testbench/Python register sequence into a VEGA-side driver or bare-metal application, allocate DDR buffers from host software, and validate end-to-end image-task inference on the FPGA system.
 
 ## 6. Acceleration Achieved
 
