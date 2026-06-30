@@ -53,13 +53,16 @@ title: VEGA — Simulation Setup
 ---
 flowchart LR
 
-    %% ── Input preparation ────────────────────────────────────────────
+    %% ── Host ─────────────────────────────────────────────────────────
     subgraph SW["🖥  Host  (Python + infer.py)"]
         direction TB
         PY["Detect objects\nResolve task"]
         MEM["Write .mem files\nobjects · task · pixels\nmatrix_a · matrix_b"]
         PY --> MEM
     end
+
+    %% ── DDR memory model ─────────────────────────────────────────────
+    DDR[("DDR model\nddr_mem.sv\n580 k words")]
 
     %% ── Testbench ────────────────────────────────────────────────────
     subgraph TB["🔧  Testbench  (tb_vega.sv)"]
@@ -80,9 +83,6 @@ flowchart LR
         CSR --> DMA --> PIPE
     end
 
-    %% ── Memory ───────────────────────────────────────────────────────
-    DDR[("DDR model\nddr_mem.sv\n580 k words")]
-
     %% ── Outputs ──────────────────────────────────────────────────────
     subgraph OUT["📄  Output files"]
         direction TB
@@ -94,12 +94,16 @@ flowchart LR
     REF["matrix_ref.mem\nPython reference"]
 
     %% ── Flow ─────────────────────────────────────────────────────────
-    SW -->|"$readmemh"| INIT
+    MEM -->|"write input data"| DDR
+    DDR -->|"$readmemh into TB"| INIT
     CFG -->|"AXI4-Full slave"| CSR
-    DMA <-->|"AXI4-Full master"| DDR
+    DMA <-->|"AXI4-Full master R/W"| DDR
+    POLL --> CHK
+    DDR -->|"read back results"| CHK
     CHK --> R1
     CHK --> R2
     CHK --> R3
+    MEM -->|"generate reference"| REF
     CHK -.->|"bit-exact compare"| REF
 
     %% ── Styling ──────────────────────────────────────────────────────
