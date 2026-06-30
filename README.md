@@ -5,8 +5,6 @@
 - Siemens QuestaSim
 - Xilinx Vivado with support for `xc7k160tffg676-2`
 The Kintex-7 part `xc7k160tffg676-2` is used by Vivado for synthesis, implementation, and route as the required Kintex-7 XC7K325T is not available.
-
-This project can be built and run on both Windows and Linux. Vivado and QuestaSim each ship native Windows and Linux installers; install whichever matches your OS and adjust the PATH entries below accordingly.
  
 Install GNU Make:
 
