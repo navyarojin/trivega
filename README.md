@@ -1,56 +1,5 @@
-# TriVega Accelerator
- 
-## Project Files
- 
-```text
-constraints/
-  constraints.xdc        Vivado timing constraints
- 
-models/
-  model.pt               Python Model checkpoint
- 
-rtl/
-  top.sv                 Synthesis wrapper
-  vega_core.sv           Main accelerator core
-  axi4_regs.sv           AXI4 register/control interface
-  axi4_dma.sv            DMA controller
-  dma_rd.sv              AXI read engine
-  dma_wr.sv              AXI write engine
-  embed_proj.sv          Feature projection datapath
-  cos_sim.sv             Similarity computation
-  aff_score.sv           Affordance score logic
-  score_fuse.sv          Score fusion logic
-  top1_sel.sv            Best-result selector
- 
-tb/
-  tb_vega.sv             Main testbench
-  ddr_mem.sv             DDR memory model
- 
-scripts/
-  sim/modelsim.ini       Questa Sim library setup
-  sim/wave.do            Waveform setup
-  vivado/sim.tcl         Vivado/XSim simulation script
-  vivado/run.tcl         Vivado run script
-  vivado.cmd             Vivado launch file
- 
-sw/
-  vega.py                Task/object model logic
-  infer.py               Python flow to generate inputs, run RTL, and render output
-  test.jpg               Sample input image
- 
-outputs/
-  reports/               Vivado and simulation reports
-  logs/                  Vivado logs and journals
-  vivado_project/        Generated Vivado project
- 
-Makefile                 Run commands
-README.md                Instructions to run
-Report.pdf               Stage 2B report 
-AXIinterface.pdf         AXI interface details
-```
- 
-## Required Software
- 
+## Required Software 
+
 - Python 3.10+
 - GNU Make
 - Siemens QuestaSim
@@ -139,6 +88,55 @@ pip install transformers huggingface-hub scikit-learn scipy tqdm
 ```
 
 > Note: on Linux, use `python3` instead of `python` if `python` is not recognized (e.g. `python3 -m venv .venv`).
+
+## Project Files
+ 
+```text
+constraints/
+  constraints.xdc        Vivado timing constraints
+ 
+models/
+  model.pt               Python Model checkpoint
+ 
+rtl/
+  top.sv                 Synthesis wrapper
+  vega_core.sv           Main accelerator core
+  axi4_regs.sv           AXI4 register/control interface
+  axi4_dma.sv            DMA controller
+  dma_rd.sv              AXI read engine
+  dma_wr.sv              AXI write engine
+  embed_proj.sv          Feature projection datapath
+  cos_sim.sv             Similarity computation
+  aff_score.sv           Affordance score logic
+  score_fuse.sv          Score fusion logic
+  top1_sel.sv            Best-result selector
+ 
+tb/
+  tb_vega.sv             Main testbench
+  ddr_mem.sv             DDR memory model
+ 
+scripts/
+  sim/modelsim.ini       Questa Sim library setup
+  sim/wave.do            Waveform setup
+  vivado/sim.tcl         Vivado/XSim simulation script
+  vivado/run.tcl         Vivado run script
+  vivado.cmd             Vivado launch file
+ 
+sw/
+  vega.py                Task/object model logic
+  infer.py               Python flow to generate inputs, run RTL, and render output
+  test.jpg               Sample input image
+ 
+outputs/
+  reports/               Vivado and simulation reports
+  logs/                  Vivado logs and journals
+  vivado_project/        Generated Vivado project
+ 
+Makefile                 Run commands
+README.md                Instructions to run
+Report.pdf               Stage 2B report 
+AXIinterface.pdf         AXI interface details
+```
  
 ## Run RTL Simulation
 
@@ -160,27 +158,23 @@ Run simulation with a specific matrix size (N = 1, 2, 3, or 4):
 make sim N=3
 ```
 
-Run the Vivado/XSim equivalent in GUI mode:
+Run the Vivado equivalent in GUI mode:
 
 ```text
 make viv_sim
 ```
 
-Run the Vivado/XSim equivalent with a specific matrix size:
+Run the Vivado equivalent with a specific matrix size:
 
 ```text
 make viv_sim N=3
 ```
 
-Run the Vivado/XSim equivalent in batch mode:
+Run the Vivado equivalent in batch mode:
 
 ```text
 make viv_sim_batch
 ```
-
-The Vivado/XSim flow compiles the same RTL and testbench files as `make sim`,
-passes the same `MATRIX_N` setting, and recreates the waveform groups from
-`scripts/sim/wave.do`.
  
 Run simulation through the Python image flow. The `--task` argument accepts a task number from 1-14:
  
