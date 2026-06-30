@@ -138,11 +138,9 @@ AXIinterface.pdf         AXI interface details
  
 ## Run RTL Simulation
 
-The intended RTL simulation flow uses Siemens QuestaSim. Vivado/XSim is also
-provided as a temporary waveform-viewing fallback when the Questa license is not
-available.
+Simulation on both QuestaSim and Vivado is available.
  
-The `make` and `python` commands below are identical on Windows (PowerShell) and Linux (bash); only the venv activation and PATH setup above differ between platforms.
+The `make` and `python` commands below are identical for Windows and Linux.
 
 Run the default simulation:
  
