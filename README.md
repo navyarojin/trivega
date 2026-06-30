@@ -14,7 +14,7 @@ Install GNU Make:
 choco install make
 ```
 
-**Linux (Debian/Ubuntu):**
+**Linux (bash):**
 
 ```bash
 sudo apt-get update
